@@ -1,0 +1,11 @@
+<resources>
+    <style name="Theme.NexaBug" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:windowBackground">@drawable/bg_particle</item>
+        <item name="colorPrimary">#00FFFF</item>
+    </style>
+    <style name="Theme.Splash" parent="Theme.NexaBug">
+        <item name="android:windowBackground">@drawable/splash_bg</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+</resources>

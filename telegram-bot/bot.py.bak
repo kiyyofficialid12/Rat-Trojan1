@@ -1,0 +1,104 @@
+#!/usr/bin/env python3
+import logging, random, string, json, requests
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
+
+TOKEN = "8988179447:AAEwRu3mmjy0MGeRHb4HPQQGzov5q4u8dEE"
+ADMIN_CHAT_ID = 7683760111
+API_URL = "http://localhost:3000/api"
+
+logging.basicConfig(level=logging.INFO)
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    keyboard = [
+        [InlineKeyboardButton("🛒 Beli Key 1 Hari", callback_data="buy_day")],
+        [InlineKeyboardButton("🛒 Beli Key 1 Bulan", callback_data="buy_month")],
+        [InlineKeyboardButton("🛒 Beli Key Permanen", callback_data="buy_permanent")],
+        [InlineKeyboardButton("🎁 Dapatkan Key Gratis", callback_data="free_key")],
+        [InlineKeyboardButton("🔑 Aktivasi Key", callback_data="activate")],
+        [InlineKeyboardButton("ℹ️ Info Bot", callback_data="info")],
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    await update.message.reply_text(
+        "🤖 *NEXA BUG ULTIMATE*\n\n"
+        "🔥 Bug WhatsApp Premium\n"
+        "📱 Pairing Code (tanpa QR)\n"
+        "💀 8 Jenis Bug Mematikan\n\n"
+        "Pilih menu di bawah:",
+        reply_markup=reply_markup, parse_mode="Markdown"
+    )
+
+async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    data = query.data
+
+    if data.startswith("buy_"):
+        duration = data.replace("buy_", "")
+        try:
+            resp = requests.post(f"{API_URL}/generate-key", json={"duration": duration})
+            if resp.status_code == 200:
+                key = resp.json()["key"]
+                prices = {"day": "Rp 5.000", "month": "Rp 25.000", "permanent": "Rp 100.000"}
+                await query.edit_message_text(
+                    f"✅ Key {duration} berhasil dibuat!\n\n"
+                    f"📋 Key: `{key}`\n\n"
+                    f"💰 Harga: {prices.get(duration, 'Rp 5.000')}\n"
+                    f"📌 Transfer ke admin @kiyy_official1 lalu kirim bukti.",
+                    parse_mode="Markdown"
+                )
+            else:
+                await query.edit_message_text("❌ Gagal generate key, coba lagi.")
+        except Exception as e:
+            await query.edit_message_text(f"❌ Error: {e}")
+
+    elif data == "free_key":
+        try:
+            resp = requests.post(f"{API_URL}/generate-key", json={"duration": "day"})
+            if resp.status_code == 200:
+                key = resp.json()["key"]
+                await query.edit_message_text(
+                    f"🎁 *Key Gratis (Demo)*\n\n"
+                    f"📋 Key: `{key}`\n\n"
+                    f"⏳ Berlaku 1 hari\n"
+                    f"🔗 Masukkan di APK untuk aktivasi.",
+                    parse_mode="Markdown"
+                )
+            else:
+                await query.edit_message_text("❌ Gagal generate key.")
+        except Exception as e:
+            await query.edit_message_text(f"❌ Error: {e}")
+
+    elif data == "activate":
+        await query.edit_message_text(
+            "🔑 *Cara Aktivasi Key:*\n\n"
+            "1. Buka APK Nexa Bug\n"
+            "2. Masukkan key di kolom 'Key'\n"
+            "3. Klik 'Aktivasi Key'\n\n"
+            "✅ Key valid = akses bug terbuka.",
+            parse_mode="Markdown"
+        )
+
+    elif data == "info":
+        await query.edit_message_text(
+            "ℹ️ *NEXA BUG ULTIMATE*\n\n"
+            "🔹 Fitur: 8 jenis bug WhatsApp\n"
+            "🔹 Forclose Invisible, Hard, Delay\n"
+            "🔹 Onehit, Spam Call, Spam Pair\n"
+            "🔹 Koneksi via Pairing Code (no QR)\n"
+            "🔹 Developer: KiYY OFFICIAL\n\n"
+            "💬 Admin: @kiyy_official1\n"
+            "🤖 Bot: @nexabug_bot",
+            parse_mode="Markdown"
+        )
+
+def main():
+    app = Application.builder().token(TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("help", start))
+    app.add_handler(CallbackQueryHandler(button_handler))
+    print("🤖 Telegram bot running...")
+    app.run_polling()
+
+if __name__ == "__main__":
+    main()

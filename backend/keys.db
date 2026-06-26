@@ -1,0 +1,20 @@
+{
+  "keys": {
+    "NEXA-R1B8QHX0ASER": {
+      "expiry": 1782570920283,
+      "used": false,
+      "duration": "day"
+    },
+    "NEXA-FO0W3BPPGOQC": {
+      "expiry": 1782570957969,
+      "used": false,
+      "duration": "day"
+    },
+    "NEXA-ICDXYQFZPAUV": {
+      "expiry": 1782571220280,
+      "used": false,
+      "duration": "day"
+    }
+  },
+  "users": {}
+}

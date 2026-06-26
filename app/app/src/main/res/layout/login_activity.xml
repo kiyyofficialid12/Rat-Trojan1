@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:gravity="center" android:padding="24dp"
+    android:background="@drawable/bg_particle">
+    <EditText android:id="@+id/etKey" android:layout_width="match_parent" android:layout_height="56dp"
+        android:hint="Masukkan Key" android:textColor="#FFF" android:background="#1A1A2E" android:padding="16dp"
+        android:layout_marginBottom="12dp" />
+    <EditText android:id="@+id/etPassword" android:layout_width="match_parent" android:layout_height="56dp"
+        android:hint="Masukkan Password" android:inputType="textPassword" android:textColor="#FFF"
+        android:background="#1A1A2E" android:padding="16dp" android:layout_marginBottom="16dp" />
+    <Button android:id="@+id/btnLogin" android:layout_width="match_parent" android:layout_height="56dp"
+        android:text="LOGIN" android:background="#00FFFF" android:textColor="#000" />
+    <TextView android:id="@+id/tvError" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:textColor="#FF4444" android:layout_marginTop="12dp" />
+</LinearLayout>

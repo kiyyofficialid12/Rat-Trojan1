@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@drawable/bg_particle" android:padding="16dp">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="NEXA BUG" android:textSize="28sp" android:textColor="#00FFFF"
+        android:layout_gravity="center" android:layout_marginTop="20dp" />
+    <EditText android:id="@+id/etTarget" android:layout_width="match_parent" android:layout_height="56dp"
+        android:hint="628xxxxxxxx" android:textColor="#FFF" android:background="#1A1A2E" android:padding="16dp"
+        android:layout_marginTop="16dp" />
+    <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:columnCount="2" android:rowCount="4" android:layout_marginTop="12dp">
+        <Button android:id="@+id/btnBugFI" android:layout_width="0dp" android:layout_height="52dp"
+            android:layout_columnWeight="1" android:text="Forclose Inv" android:background="#1A1A2E"
+            android:textColor="#00FFFF" android:layout_margin="4dp" />
+        <Button android:id="@+id/btnBugFH" android:layout_width="0dp" android:layout_height="52dp"
+            android:layout_columnWeight="1" android:text="Forclose Hard" android:background="#1A1A2E"
+            android:textColor="#FF4444" android:layout_margin="4dp" />
+        <Button android:id="@+id/btnBugFD" android:layout_width="0dp" android:layout_height="52dp"
+            android:layout_columnWeight="1" android:text="Forclose Delay" android:background="#1A1A2E"
+            android:textColor="#FFAA00" android:layout_margin="4dp" />
+        <Button android:id="@+id/btnBugID" android:layout_width="0dp" android:layout_height="52dp"
+            android:layout_columnWeight="1" android:text="Invisible Delay" android:background="#1A1A2E"
+            android:textColor="#00FFFF" android:layout_margin="4dp" />
+        <Button android:id="@+id/btnBugHD" android:layout_width="0dp" android:layout_height="52dp"
+            android:layout_columnWeight="1" android:text="Hard Delay" android:background="#1A1A2E"
+            android:textColor="#FF00FF" android:layout_margin="4dp" />
+        <Button android:id="@+id/btnBugOH" android:layout_width="0dp" android:layout_height="52dp"
+            android:layout_columnWeight="1" android:text="Onehit" android:background="#1A1A2E"
+            android:textColor="#FFD700" android:layout_margin="4dp" />
+        <Button android:id="@+id/btnBugSC" android:layout_width="0dp" android:layout_height="52dp"
+            android:layout_columnWeight="1" android:text="Spam Call" android:background="#1A1A2E"
+            android:textColor="#FF4444" android:layout_margin="4dp" />
+        <Button android:id="@+id/btnBugSP" android:layout_width="0dp" android:layout_height="52dp"
+            android:layout_columnWeight="1" android:text="Spam Pair" android:background="#1A1A2E"
+            android:textColor="#33FF33" android:layout_margin="4dp" />
+    </GridLayout>
+</LinearLayout>
