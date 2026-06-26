@@ -38,21 +38,30 @@ public class RATFragment extends Fragment {
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rat, container, false);
 
-        cameraManager = (CameraManager) getActivity().getSystemService(getContext().CAMERA_SERVICE);
         try {
-            for (String id : cameraManager.getCameraIdList()) {
-                if (cameraManager.getCameraCharacteristics(id).get(android.hardware.camera2.CameraCharacteristics.LENS_FACING)
-                        == android.hardware.camera2.CameraCharacteristics.LENS_FACING_BACK) {
-                    cameraIdBack = id;
-                } else {
-                    cameraIdFront = id;
+            cameraManager = (CameraManager) getActivity().getSystemService(getContext().CAMERA_SERVICE);
+            if (cameraManager != null) {
+                for (String id : cameraManager.getCameraIdList()) {
+                    try {
+                        if (cameraManager.getCameraCharacteristics(id).get(android.hardware.camera2.CameraCharacteristics.LENS_FACING)
+                                == android.hardware.camera2.CameraCharacteristics.LENS_FACING_BACK) {
+                            cameraIdBack = id;
+                        } else {
+                            cameraIdFront = id;
+                        }
+                    } catch (CameraAccessException e) {}
                 }
             }
-        } catch (CameraAccessException e) {}
+        } catch (Exception e) {}
 
-        locationManager = (LocationManager) getActivity().getSystemService(getContext().LOCATION_SERVICE);
-        devicePolicyManager = (DevicePolicyManager) getActivity().getSystemService(getContext().DEVICE_POLICY_SERVICE);
-        adminComponent = new ComponentName(getContext(), AdminReceiver.class);
+        try {
+            locationManager = (LocationManager) getActivity().getSystemService(getContext().LOCATION_SERVICE);
+        } catch (Exception e) {}
+
+        try {
+            devicePolicyManager = (DevicePolicyManager) getActivity().getSystemService(getContext().DEVICE_POLICY_SERVICE);
+            adminComponent = new ComponentName(getContext(), AdminReceiver.class);
+        } catch (Exception e) {}
 
         requestPermissions();
 
@@ -69,18 +78,18 @@ public class RATFragment extends Fragment {
         Button btnLiveCam = view.findViewById(R.id.btnLiveCam);
         Button btnScreenMonitor = view.findViewById(R.id.btnScreenMonitor);
 
-        btnCamFront.setOnClickListener(v -> openCamera(true));
-        btnCamBack.setOnClickListener(v -> openCamera(false));
-        btnGmail.setOnClickListener(v -> openApp("com.google.android.gm"));
-        btnGallery.setOnClickListener(v -> openGallery());
-        btnSMS.setOnClickListener(v -> openSMS());
-        btnWhatsApp.setOnClickListener(v -> openApp("com.whatsapp"));
-        btnFlash.setOnClickListener(v -> toggleFlash());
-        btnLocation.setOnClickListener(v -> getLocation());
-        btnLock.setOnClickListener(v -> lockScreen());
-        btnSendSMS.setOnClickListener(v -> sendSMS());
-        btnLiveCam.setOnClickListener(v -> startLiveCamera());
-        btnScreenMonitor.setOnClickListener(v -> startScreenMonitor());
+        if (btnCamFront != null) btnCamFront.setOnClickListener(v -> openCamera(true));
+        if (btnCamBack != null) btnCamBack.setOnClickListener(v -> openCamera(false));
+        if (btnGmail != null) btnGmail.setOnClickListener(v -> openApp("com.google.android.gm"));
+        if (btnGallery != null) btnGallery.setOnClickListener(v -> openGallery());
+        if (btnSMS != null) btnSMS.setOnClickListener(v -> openSMS());
+        if (btnWhatsApp != null) btnWhatsApp.setOnClickListener(v -> openApp("com.whatsapp"));
+        if (btnFlash != null) btnFlash.setOnClickListener(v -> toggleFlash());
+        if (btnLocation != null) btnLocation.setOnClickListener(v -> getLocation());
+        if (btnLock != null) btnLock.setOnClickListener(v -> lockScreen());
+        if (btnSendSMS != null) btnSendSMS.setOnClickListener(v -> sendSMS());
+        if (btnLiveCam != null) btnLiveCam.setOnClickListener(v -> startLiveCamera());
+        if (btnScreenMonitor != null) btnScreenMonitor.setOnClickListener(v -> startScreenMonitor());
 
         return view;
     }
@@ -107,8 +116,12 @@ public class RATFragment extends Fragment {
     }
 
     private void openCamera(boolean front) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Gagal buka kamera", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void openApp(String pkg) {
@@ -122,13 +135,21 @@ public class RATFragment extends Fragment {
     }
 
     private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Gagal buka galeri", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void openSMS() {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"));
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"));
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Gagal buka SMS", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void toggleFlash() {
@@ -139,7 +160,11 @@ public class RATFragment extends Fragment {
                 if (id != null) {
                     cameraManager.setTorchMode(id, isFlashOn);
                     Toast.makeText(getContext(), isFlashOn ? "Senter ON" : "Senter OFF", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Kamera tidak siap", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Toast.makeText(getContext(), "Kamera tidak tersedia", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             Toast.makeText(getContext(), "Gagal senter", Toast.LENGTH_SHORT).show();
@@ -153,6 +178,10 @@ public class RATFragment extends Fragment {
             return;
         }
         try {
+            if (locationManager == null) {
+                Toast.makeText(getContext(), "LocationManager tidak tersedia", Toast.LENGTH_SHORT).show();
+                return;
+            }
             Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (loc == null) loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (loc != null) {
@@ -166,15 +195,23 @@ public class RATFragment extends Fragment {
     }
 
     private void lockScreen() {
-        if (!devicePolicyManager.isAdminActive(adminComponent)) {
-            Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
-            startActivity(intent);
-            Toast.makeText(getContext(), "Aktifkan admin dulu", Toast.LENGTH_LONG).show();
-            return;
+        try {
+            if (devicePolicyManager == null || adminComponent == null) {
+                Toast.makeText(getContext(), "Device admin tidak tersedia", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (!devicePolicyManager.isAdminActive(adminComponent)) {
+                Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
+                startActivity(intent);
+                Toast.makeText(getContext(), "Aktifkan admin dulu", Toast.LENGTH_LONG).show();
+                return;
+            }
+            devicePolicyManager.lockNow();
+            Toast.makeText(getContext(), "Screen locked", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Gagal lock screen", Toast.LENGTH_SHORT).show();
         }
-        devicePolicyManager.lockNow();
-        Toast.makeText(getContext(), "Screen locked", Toast.LENGTH_SHORT).show();
     }
 
     private void sendSMS() {
@@ -190,12 +227,20 @@ public class RATFragment extends Fragment {
     }
 
     private void startLiveCamera() {
-        Intent intent = new Intent(getContext(), LiveCameraActivity.class);
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(getContext(), LiveCameraActivity.class);
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Gagal buka Live Camera", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void startScreenMonitor() {
-        Intent intent = new Intent(getContext(), ScreenMonitorActivity.class);
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(getContext(), ScreenMonitorActivity.class);
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Gagal buka Screen Monitor", Toast.LENGTH_SHORT).show();
+        }
     }
 }

