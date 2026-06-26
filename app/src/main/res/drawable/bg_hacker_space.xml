@@ -15,10 +15,4 @@
             <solid android:color="#00000000" />
         </shape>
     </item>
-    <item>
-        <bitmap
-            android:src="@drawable/ic_logo"
-            android:gravity="center"
-            android:alpha="0.05" />
-    </item>
 </layer-list>
