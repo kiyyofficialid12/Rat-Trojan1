@@ -1,0 +1,6 @@
+-dontwarn android.support.**
+-dontwarn androidx.**
+-keepattributes *Annotation*, Signature, Exceptions
+-assumenosideeffects class android.util.Log { public static *** d(...); public static *** v(...); public static *** i(...); public static *** w(...); public static *** e(...); }
+-keepclasseswithmembernames class * { native <methods>; }
+-keep class com.rat.premium.** { *; }

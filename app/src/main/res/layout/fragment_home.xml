@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center"
+    android:background="@drawable/bg_hacker_space">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RAT Premium"
+        android:textSize="28sp"
+        android:textColor="#00FF41"
+        android:fontFamily="sans-serif-black"
+        android:shadowColor="#00FF41"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="20" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remote Access Toolkit"
+        android:textSize="16sp"
+        android:textColor="#888"
+        android:layout_marginTop="8dp" />
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/ic_logo"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status: ONLINE"
+        android:textSize="18sp"
+        android:textColor="#00FF41"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/tvDeviceId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Device ID: ..."
+        android:textSize="12sp"
+        android:textColor="#555"
+        android:layout_marginTop="8dp" />
+</LinearLayout>
